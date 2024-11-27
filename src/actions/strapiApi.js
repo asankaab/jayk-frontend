@@ -1,9 +1,9 @@
-// ./strapi_content_api.js
+'use server'
 
 import { auth } from "@/auth";
 import { getStrapiURL } from "@/lib/utils";
 import { url } from "inspector";
-import { revalidateTag } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 
 export async function getEntries(query) {
     try {
@@ -33,7 +33,7 @@ export async function getEntries(query) {
   }
 // 
 
-export async function getWatchList(query) {
+export async function getWatchList() {
   const session = await auth();
 
     const response = await fetch(getStrapiURL(`/api/watchlists?populate[products][populate][0]=images&filters[userId][$eq]=${session?.user?.id}`), {
@@ -47,7 +47,7 @@ export async function getWatchList(query) {
 
     const jsonResponse = await response.json();
     const data = jsonResponse.data; // Accessing the 'data' array
-    return data;
+    return data[0];
 
 }
 
@@ -81,16 +81,17 @@ export async function save(productId) {
   const watchList = await getWatchList();
   revalidateTag('watchlist')
 
-  if (watchList[0]) {
-    const watchListId = watchList[0].documentId;
-
-    const isFav = await isFavourite(productId);
-
-      if (isFav) {
-        await removeFav(watchListId, productId);
-      } else {
-        await addFav(watchListId, productId);
-      }
+  if (watchList) {
+    
+    const watchListId = watchList.documentId;
+    const isFav = await isFavourite(productId)
+    revalidateTag('watchlist')
+    
+    if (isFav) {
+      await removeFav(watchListId, productId);
+    } else {
+      await addFav(watchListId, productId);
+    }
 
   } else {
 
@@ -106,23 +107,10 @@ export async function isFavourite(productId) {
   const session = await auth();
   if (!session) return null
   
-  const res = await fetch(getStrapiURL(`/api/products/${productId}?populate=watchlists`), {
-    method: 'GET',
-    headers: {
-        Authorization: `Bearer ${session?.jwt}`,
-        'Content-Type': 'application/json',
-    }
-  });
-
-  const data = await res.json();
-  const list = data?.data?.watchlists?.map((element) => {
-      if (element.userId === session.user.id) {
-        return true
-      }
-  });
-
-  const isFav = list[0]
-  console.log({isFav: isFav})
+  const watchList = await getWatchList();
+  const isFav = watchList?.products?.map((product) => {
+    return product.documentId;
+  }).includes(productId)
 
   return isFav
 }

@@ -6,7 +6,6 @@ import { BlocksRenderer } from "@strapi/blocks-react-renderer"
 import { Bookmark, Maximize2 } from "lucide-react";
 import Image from "next/image"
 import { auth } from "@/auth";
-import { getStrapiURL } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import FavouriteButton from "@/components/FavouriteButton";
 
@@ -17,7 +16,7 @@ export default async function ProductPage({params}) {
     const { slug } = await params;
     const productData = await getEntries(`products?populate[images][populate]&filters[slug][$eq]=${slug}`);
 
-    const productId = productData[0].documentId;
+    const productId = await productData[0].documentId;
     
     const isFav = await isFavourite(productId);
 
@@ -67,13 +66,8 @@ export default async function ProductPage({params}) {
                     <h2 className="font-bold text-3xl">{priceFormatted}</h2>
                     <BlocksRenderer content={productData[0].content} blocks={blockStyle} />
                     <div className="flex gap-2">
-                        <Button size="lg" className="bg-transparent border border-primary text-primary hover:bg-primary hover:text-white transition">Contact</Button>
-                        <form action={ async() => { 
-                            'use server'
-                                await save(productId)
-                            }}>
-                            <FavouriteButton disabled={session ? false : true} isFav={isFav}/>
-                        </form>
+                        <FavouriteButton disabled={session ? false : true} isFav={isFav} productId={productId}/>
+                        <Button className="bg-transparent border border-primary text-primary hover:bg-primary hover:text-white transition">Contact</Button>
                     </div>
                 </div>
             </div>
