@@ -9,11 +9,12 @@ import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
 import { Terminal } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { signIn } from "@/actions/auth";
  
 export default function SignInForm() {
 
   const [state, formAction, isPending] = useActionState(
-    authenticate,
+    signIn,
     undefined,
   );
 
