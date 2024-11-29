@@ -1,5 +1,4 @@
 import Card from "@/components/Card";
-import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
 import Image from "next/image";
 import Link from "next/link";
 import LinkCard from "@/components/LinkCard";

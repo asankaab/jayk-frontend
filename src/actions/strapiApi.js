@@ -1,9 +1,8 @@
 'use server'
 
-import { auth } from "@/auth";
+import { getAuthToken, getUser } from "@/authentication";
 import { getStrapiURL } from "@/lib/utils";
-import { url } from "inspector";
-import { revalidatePath, revalidateTag } from "next/cache";
+import { revalidateTag } from "next/cache";
 
 export async function getEntries(query) {
     try {
@@ -34,13 +33,14 @@ export async function getEntries(query) {
 // 
 
 export async function getWatchList() {
-  const session = await auth();
+  const user = await getUser();
+  const token = await getAuthToken();
 
-    const response = await fetch(getStrapiURL(`/api/watchlists?populate[products][populate][0]=images&filters[userId][$eq]=${session?.user?.id}`), {
+    const response = await fetch(getStrapiURL(`/api/watchlists?populate[products][populate][0]=images&filters[userId][$eq]=${user?.documentId}`), {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${session.jwt}`, 
+        Authorization: `Bearer ${token}`, 
       },
       next: { tags: ['watchlist'], revalidate: 10 } 
     });
@@ -52,13 +52,13 @@ export async function getWatchList() {
 }
 
 export async function createWatchlist() {
-  const session = await auth();
+  const token = await getAuthToken();
 
   if (session.user) {
     const res = await fetch(getStrapiURL('/api/watchlists'), {
       method: 'POST',
       headers: {
-          Authorization: `Bearer ${session.jwt}`,
+          Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
       },
       body: JSON.stringify( { 
@@ -104,8 +104,8 @@ export async function save(productId) {
 //
 
 export async function isFavourite(productId) {
-  const session = await auth();
-  if (!session) return null
+  const token = await getAuthToken();
+  if (!token) return null
   
   const watchList = await getWatchList();
   const isFav = watchList?.products?.map((product) => {
@@ -117,11 +117,11 @@ export async function isFavourite(productId) {
 //
 
 export async function addFav(watchListId, productId) {
-  const session = await auth();
+  const token = await getAuthToken();
   const res = await fetch(getStrapiURL(`/api/watchlists/${watchListId}`), {
     method: 'PUT',
     headers: {
-        Authorization: `Bearer ${session.jwt}`,
+        Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
     },
     body: JSON.stringify( {
@@ -139,11 +139,11 @@ export async function addFav(watchListId, productId) {
 //
 
 export async function removeFav(watchListId, productId) {
-  const session = await auth();
+  const token = await getAuthToken();
   const res = await fetch(getStrapiURL(`/api/watchlists/${watchListId}`), {
     method: 'PUT',
     headers: {
-        Authorization: `Bearer ${session.jwt}`,
+        Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
     },
     body: JSON.stringify( { 
