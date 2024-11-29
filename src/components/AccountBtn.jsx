@@ -6,16 +6,18 @@ import { Button } from "./ui/button";
 import getProfile from "@/actions/getProfile";
 import { SignOutBtn } from "./SignOutBtn";
 import { auth } from "@/auth";
+import { getUser } from "@/authentication";
 
 export default async function AccountBtn() {
 
     const session = await auth();
+    const user = await getUser();
 
     return (
         <Popover>
             <PopoverTrigger>
                 <Avatar>
-                    <AvatarImage className="border border-primary rounded-full" src={null} />
+                    <AvatarImage className="border border-primary rounded-full" src={user?.avatar?.formats.small.url} />
                     <AvatarFallback><CircleUser className={session ? "outline outline-secondary rounded-full" : ""}/></AvatarFallback>
                 </Avatar>
             </PopoverTrigger>

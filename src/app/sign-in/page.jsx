@@ -1,10 +1,9 @@
-import { auth } from "@/auth"
 import SignInForm from "@/components/SignInForm"
 import { redirect } from "next/navigation"
  
 export default async function SignInPage() {
 
-  const session = await auth()
+  // const session = await auth()
 
   // if (session) return redirect('myaccount')
 

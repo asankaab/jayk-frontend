@@ -3,6 +3,7 @@ import Credentials from 'next-auth/providers/credentials';
 import { z } from 'zod';
 import { getStrapiURL } from './lib/utils';
 import { loginSchema } from './lib/zod';
+import { cookies } from 'next/headers';
  
 export const { auth, signIn, signOut } = NextAuth({
   providers: [
@@ -60,3 +61,4 @@ export const { auth, signIn, signOut } = NextAuth({
     },
   },
 });
+
