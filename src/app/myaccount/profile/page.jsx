@@ -1,13 +1,11 @@
-import { auth } from "@/auth";
 import { permanentRedirect, redirect } from "next/navigation";
-import getProfile from "@/actions/getProfile";
 import { CircleCheck } from "lucide-react";
 import Link from "next/link";
+import { getUser } from "@/authentication";
 
 export default async function Profile() {
 
-    const session = await auth();
-    const profile = await getProfile();
+    const profile = await getUser();
     
     function capitalize() {
         if (profile?.username) {
@@ -20,7 +18,7 @@ export default async function Profile() {
     const createdDate = createdAtObj.toDateString();
     const createdTime = createdAtObj.toLocaleTimeString();
 
-    if (!session) return redirect('sign-in', 'replace')
+    if (!profile) return redirect('sign-in', 'replace')
 
     return (
         <div className="space-y-2">

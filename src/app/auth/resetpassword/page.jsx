@@ -2,7 +2,6 @@
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { useActionState } from "react";
-import { resetPassword } from "@/lib/actions";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle, CircleCheck } from "lucide-react";
 import Image from "next/image";
@@ -17,7 +16,7 @@ export default function ResetPassword() {
     const email = params.get('email')
     const code = params.get('code');
 
-  const [state, formAction, isPending] = useActionState(resetPassword,undefined,);
+  const [state, formAction, isPending] = useActionState(null,undefined,);
 
   return (
     <div className="container w-11/12 mx-auto text-left py-5">

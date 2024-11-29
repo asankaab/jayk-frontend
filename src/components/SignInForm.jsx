@@ -3,18 +3,16 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { useActionState } from "react";
-import { authenticate } from "@/lib/actions";
 import { permanentRedirect, redirect } from "next/navigation";
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
 import { Terminal } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { signIn } from "@/actions/auth";
  
 export default function SignInForm() {
 
   const [state, formAction, isPending] = useActionState(
-    signIn,
+    null,
     undefined,
   );
 

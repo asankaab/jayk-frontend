@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "./ui/label"
 import { useActionState } from "react"
-import { createUser } from "@/lib/actions"
 import Image from "next/image"
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert"
 import { AlertCircle, CircleCheck } from "lucide-react"
@@ -12,7 +11,7 @@ import Link from "next/link"
 
 export function SignupForm() {   
 
-  const [state, formAction, isPending] = useActionState(createUser, null);
+  const [state, formAction, isPending] = useActionState(null, null);
 
     return (
       <div className="border p-4 rounded-md text-center space-y-2">

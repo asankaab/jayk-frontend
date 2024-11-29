@@ -1,11 +1,11 @@
-import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import { getWatchList } from "@/actions/strapiApi";
 import Card from "@/components/Card";
+import { getUser } from "@/authentication";
 
 export default async function WatchList() {
 
-    const session = await auth()
+    const session = await getUser();
 
     if (!session) return redirect('sign-in', 'replace')
 
