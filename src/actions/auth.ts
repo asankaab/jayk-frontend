@@ -1,5 +1,6 @@
 import { getStrapiURL } from "@/lib/utils";
 import { loginSchema } from "@/lib/zod";
+import { redirect } from "next/navigation";
 
 export async function signIn(pervState, formData) {
     
@@ -17,5 +18,8 @@ export async function signIn(pervState, formData) {
         });
 
     const user = await route.json();
-    console.log(user)
+    
+    if (user) {
+        return redirect('myaccount')
+    }
 }
