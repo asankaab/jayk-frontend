@@ -16,13 +16,13 @@ export async function POST(request) {
     const { user, error, jwt } = await res.json();
 
     if (error) {
-     return new Response(JSON.stringify(error.message),{ status: error.status })
+     return new Response(JSON.stringify({ error }))
     }
 
     const cookieStore = await cookies()
     const token = cookieStore.set('token', jwt)
  
-    return new Response(JSON.stringify(user), {
+    return new Response(JSON.stringify({ user }), {
         status: 200,
         // headers: { 'Set-Cookie': `token=${token}` },
     })

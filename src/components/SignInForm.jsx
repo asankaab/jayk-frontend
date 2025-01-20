@@ -16,6 +16,10 @@ export default function SignInForm() {
     signIn,
     undefined,
   );
+  
+  if (state?.user) {
+    redirect('myaccount', 'replace');
+  }
 
   return (
     <div className="border p-4 rounded-md text-center space-y-2">
@@ -35,7 +39,7 @@ export default function SignInForm() {
               <Terminal className="h-4 w-4" />
               <AlertTitle className="text-left text-secondary">Error!</AlertTitle>
               <AlertDescription className="text-neutral-600 text-xs text-left">
-                {state.errMsg}
+                {state.error?.message}
               </AlertDescription>
             </Alert>
           : null}

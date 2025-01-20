@@ -53,11 +53,11 @@ export default async function Home() {
         <div className="container w-11/12 mx-auto text-center grid justify-items-center gap-10">
           <h1 className="text-2xl">Featured Listings</h1>
           <div className="mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-              {content?.slice(0,4).map((item) => {
+              {content ? content?.slice(0,4).map((item) => {
                 return (
                   <Card key={item.documentId} href={"realestate/" + item.slug} image={item.images[0]} beds={item.beds} bathrooms={item.bathrooms} price={item.price} title={item.title} />
                 )
-              })}
+              }) : <p>No content</p>}
             </div>
           <Link href="realestate" className="border border-blue-900 rounded-full py-2 px-6 text-blue-900 hover:bg-gray-100">See More</Link>
         </div>

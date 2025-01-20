@@ -36,7 +36,7 @@ export async function getWatchList() {
   const user = await getUser();
   const token = await getAuthToken();
 
-    const response = await fetch(getStrapiURL(`/api/watchlists?populate[products][populate][0]=images&filters[userId][$eq]=${user?.documentId}`), {
+    const response = await fetch(getStrapiURL(`/api/watchlists?populate[products][populate][0]=images&filters[user][$eq]=${user?.username}`), {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -51,19 +51,18 @@ export async function getWatchList() {
 
 }
 
-export async function createWatchlist() {
-  const token = await getAuthToken();
-
-  if (session.user) {
+export async function createWatchlist(username) {
+  
+  if (username) {
     const res = await fetch(getStrapiURL('/api/watchlists'), {
       method: 'POST',
       headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_STRAPI_TOKEN}`,
           'Content-Type': 'application/json',
       },
       body: JSON.stringify( { 
           data: {
-            userId: session.user.id
+            user: username
           }
       })
     });
@@ -79,24 +78,13 @@ export async function createWatchlist() {
 export async function save(productId) {
   
   const watchList = await getWatchList();
-  revalidateTag('watchlist')
-
-  if (watchList) {
     
-    const watchListId = watchList.documentId;
-    const isFav = await isFavourite(productId)
-    revalidateTag('watchlist')
-    
-    if (isFav) {
-      await removeFav(watchListId, productId);
-    } else {
-      await addFav(watchListId, productId);
-    }
-
+  const watchListId = watchList.documentId;
+  const isFav = await isFavourite(productId)
+  
+  if (isFav) {
+    await removeFav(watchListId, productId);
   } else {
-
-    const watchList = await createWatchlist()
-    const watchListId = await watchList.documentId;
     await addFav(watchListId, productId);
   }
     
@@ -127,14 +115,13 @@ export async function addFav(watchListId, productId) {
     body: JSON.stringify( {
         data: {
             products: {
-                connect: [ { documentId: productId } ]
+                connect: [ productId ]
             }
         }
     })
   });
 
   const data = await res.json();
-  console.log({added: data?.data?.documentId})
 }
 //
 
@@ -149,13 +136,12 @@ export async function removeFav(watchListId, productId) {
     body: JSON.stringify( { 
         data: {
             products: {
-                disconnect: [ { documentId: productId } ]
+                disconnect: [ productId ]
             }
         }
     })
   });
 
   const data = await res.json();
-  console.log({removed: data?.data?.documentId})
 }
 
