@@ -68,7 +68,7 @@ export async function createWatchlist(username) {
     });
   
     const { data } = await res.json();
-    console.log("Watchlist created for ", data?.userId)
+    
     return data;
   }
   return "not signed in."

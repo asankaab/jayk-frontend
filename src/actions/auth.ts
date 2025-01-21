@@ -1,5 +1,5 @@
 import { getStrapiURL } from "@/lib/utils";
-import { emailSchema, loginSchema } from "@/lib/zod";
+import { emailSchema, loginSchema, registerSchema } from "@/lib/zod";
 import { createWatchlist } from "./strapiApi";
 
 export async function signIn(prevState, formData) {
@@ -28,19 +28,25 @@ export async function signUp(prevState, formData) {
     const username = await formData.get('username')
     const password = await formData.get('password')
 
-    const parsedCredentials = await emailSchema.safeParseAsync({ email })
+    const parsedCredentials = await registerSchema.safeParseAsync({ email, username, password })
 
-    const res = await fetch(getStrapiURL('/api/auth/register'), {
-        method: 'POST',
-        headers: {
-        'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email: parsedCredentials.data.email, username, password }),
-    });
+    if (parsedCredentials.success) {
 
-    const data = await res.json();
-    
-    return data;
+        const res = await fetch(getStrapiURL('/api/auth/local/register'), {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(parsedCredentials.data),
+        });
+
+        const { data, error } = await res.json();
+        
+        return { data, error };
+
+    } else {
+        return { formErrors: parsedCredentials.error.formErrors.fieldErrors };
+    }
 }
 
 
@@ -75,7 +81,6 @@ export async function confirmEmail(code: string, username: string) {
     if (res.status === 200) {
         
         const watchList = await createWatchlist(username);
-        console.log(watchList)
 
         return { success: true };
     }
