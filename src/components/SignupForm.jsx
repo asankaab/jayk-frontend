@@ -8,11 +8,12 @@ import { Alert, AlertDescription, AlertTitle } from "./ui/alert"
 import { AlertCircle, CircleCheck } from "lucide-react"
 import Link from "next/link"
 import { signUp } from "@/actions/auth"
+import { ZodAlert } from "@/components/ZodAlert"
 
 export function SignupForm() {   
 
   const [state, formAction, isPending] = useActionState(signUp, null);
-console.log(state)
+
     return (
       <div className="border p-4 rounded-md text-center space-y-2">
         <div>
@@ -21,11 +22,11 @@ console.log(state)
         </div> 
         <form action={formAction} className="space-y-3">
           <div className="text-left">
-            <Input type="text" name="username" placeholder="username"/>
+            <Input type="text" name="username" placeholder="username" defaultValue={state?.fields?.username}/>
             <ZodAlert field={state?.formErrors?.username} isPending={isPending}/>
           </div>
           <div className="text-left">
-            <Input type="text" name="email" placeholder="@email"/>
+            <Input type="text" name="email" placeholder="@email" defaultValue={state?.fields?.email}/>
             <ZodAlert field={state?.formErrors?.email} isPending={isPending}/>
           </div>
           <div className="text-left">
@@ -39,10 +40,10 @@ console.log(state)
           <AlertTitle className="flex items-center gap-2"><AlertCircle color="red"/>Error</AlertTitle>
           <AlertDescription>{state?.serverErrors}</AlertDescription>
         </Alert> : null }
-        {state?.email && !isPending ? 
+        {state?.user && !isPending ? 
         <Alert className="text-left">
           <AlertTitle className="flex items-center gap-2"><CircleCheck color="green"/>Success</AlertTitle>
-          <AlertDescription>Please check your email and complete registration.<p className="font-bold">{state?.email}</p></AlertDescription>
+          <AlertDescription>Please check your email and complete registration.<p className="font-bold">{state?.user?.email}</p></AlertDescription>
         </Alert> : null }
         <div className="space-x-2">
           <Link href="/sign-in" className="text-xs text-neutral-500 hover:text-neutral-700 hover:underline">Already user? Sign in</Link>

@@ -84,8 +84,10 @@ export async function save(productId) {
   
   if (isFav) {
     await removeFav(watchListId, productId);
+    revalidateTag('watchlist')
   } else {
     await addFav(watchListId, productId);
+    revalidateTag('watchlist')
   }
     
 }

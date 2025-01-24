@@ -14,7 +14,7 @@ export default async function Profile() {
         return "[undefined]"
     }
 
-    const createdAtObj = new Date(profile.createdAt);
+    const createdAtObj = new Date(profile?.createdAt);
     const createdDate = createdAtObj.toDateString();
     const createdTime = createdAtObj.toLocaleTimeString();
 

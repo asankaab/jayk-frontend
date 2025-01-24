@@ -1,6 +1,7 @@
 import { getStrapiURL } from "@/lib/utils";
 import { emailSchema, loginSchema, registerSchema } from "@/lib/zod";
 import { createWatchlist } from "./strapiApi";
+import { redirect } from "next/navigation";
 
 export async function signIn(prevState, formData) {
     
@@ -9,17 +10,33 @@ export async function signIn(prevState, formData) {
 
     const parsedCredentials = await loginSchema.safeParseAsync({ identifier, password })
 
-    const route = await fetch('/api/auth', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(parsedCredentials.data),
-        });
-
-    const { user, error } = await route.json();
+    if (parsedCredentials.success) {
+        
+        const route = await fetch('/api/auth', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(parsedCredentials.data),
+            });
     
-    return { user, error };
+        const { user, error } = await route.json();
+
+        if (!user) {
+            return { error, fields: { identifier: identifier } };;
+        }
+        
+        return { user };
+        
+    } else {
+        return { 
+            formErrors: parsedCredentials?.error?.formErrors?.fieldErrors, 
+            fields: {
+                identifier: identifier
+            }
+                    
+        };
+    }
 }
 
 export async function signUp(prevState, formData) {
@@ -40,12 +57,23 @@ export async function signUp(prevState, formData) {
             body: JSON.stringify(parsedCredentials.data),
         });
 
-        const { data, error } = await res.json();
+        const { user, error } = await res.json();
         
-        return { data, error };
+        return { 
+            user, 
+            serverErrors: error?.message,
+            fields: {
+                email: email, username: username
+        } };
 
     } else {
-        return { formErrors: parsedCredentials.error.formErrors.fieldErrors };
+        return { 
+            formErrors: parsedCredentials?.error?.formErrors?.fieldErrors, 
+            fields: {
+                email: email, username: username
+            }
+                    
+        };
     }
 }
 

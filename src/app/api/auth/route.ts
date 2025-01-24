@@ -20,10 +20,20 @@ export async function POST(request) {
     }
 
     const cookieStore = await cookies()
-    const token = cookieStore.set('token', jwt)
+    const token = await cookieStore.set('token', jwt)
  
     return new Response(JSON.stringify({ user }), {
         status: 200,
-        // headers: { 'Set-Cookie': `token=${token}` },
+        // headers: { 'Set-Cookie': `${token}` },
+    })
+}
+
+export async function GET(request) {
+
+    const cookieStore = await cookies()
+    const token = await cookieStore.get('token')
+
+    return new Response(JSON.stringify({ token: token.value }), {
+        status: 200,
     })
 }

@@ -7,6 +7,7 @@ import { getAuthToken, getUser } from "@/authentication";
 
 export default async function AccountBtn() {
 
+    const token = await getAuthToken();
     const user = await getUser();
 
     return (
@@ -14,11 +15,11 @@ export default async function AccountBtn() {
             <PopoverTrigger>
                 <Avatar>
                     <AvatarImage className="border border-primary rounded-full" src={user?.avatar?.formats.small.url} />
-                    <AvatarFallback><CircleUser className={user ? "outline outline-secondary rounded-full" : ""}/></AvatarFallback>
+                    <AvatarFallback><CircleUser className={token ? "outline outline-secondary rounded-full" : ""}/></AvatarFallback>
                 </Avatar>
             </PopoverTrigger>
             <PopoverContent align="end" className="py-4 px-0 divide-x bg-white border rounded-lg shadow-xl md:w-auto flex h-auto w-full">
-                {!user ? 
+                {!token ? 
                 <>
                     <div className="flex flex-col justify-between items-start px-4 space-y-2">
                         <h4 className="text-sm">Existing User?</h4>

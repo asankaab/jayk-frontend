@@ -3,7 +3,6 @@ import Image from "next/image";
 import Link from "next/link";
 import AccountBtn from "./AccountBtn";
 import {  Disclosure, DisclosureButton, DisclosurePanel, Popover, PopoverButton, PopoverGroup, PopoverPanel } from "@headlessui/react";
-// import { useEffect, useState } from "react";
 import { Menu, SquareX } from "lucide-react";
 import logo from "/public/logo.svg"
 import { menuItems } from "@/actions/menuitems";
