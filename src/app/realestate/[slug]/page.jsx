@@ -3,15 +3,15 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import { getEntries, isFavourite, save } from "@/actions/strapiApi"
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { BlocksRenderer } from "@strapi/blocks-react-renderer"
-import { Bookmark, Maximize2 } from "lucide-react";
+import { Bookmark, Maximize2, PhoneIcon } from "lucide-react";
 import Image from "next/image"
-import { auth } from "@/auth";
 import { Button } from "@/components/ui/button";
 import FavouriteButton from "@/components/FavouriteButton";
+import { getAuthToken } from "@/authentication";
 
 export default async function ProductPage({params}) {
 
-    const session = await auth();
+    const token = await getAuthToken();
 
     const { slug } = await params;
     const productData = await getEntries(`products?populate[images][populate]&filters[slug][$eq]=${slug}`);
@@ -66,8 +66,11 @@ export default async function ProductPage({params}) {
                     <h2 className="font-bold text-3xl">{priceFormatted}</h2>
                     <BlocksRenderer content={productData[0].content} blocks={blockStyle} />
                     <div className="flex gap-2">
-                        <FavouriteButton disabled={session ? false : true} isFav={isFav} productId={productId}/>
-                        <Button className="bg-transparent border border-primary text-primary hover:bg-primary hover:text-white transition">Contact</Button>
+                        <FavouriteButton disabled={token ? false : true} isFav={isFav} productId={productId}/>
+                        <Button className="text-neutral-800 hover:text-white bg-neutral-100 border 
+        hover:bg-primary disabled:text-neutral-200 space-x-2 transition">
+                            <PhoneIcon size={15}/> <p>Contact</p>
+                            </Button>
                     </div>
                 </div>
             </div>

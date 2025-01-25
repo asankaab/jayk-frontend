@@ -1,9 +1,9 @@
-import { useLinks } from "@/actions/useLinks";
+import { menuItems } from "@/actions/menuitems";
 import Link from "next/link"
 
 export default function Footer() {
     
-  const links = useLinks();
+  const links = menuItems;
 
     return (
     <footer className="w-full text-center bg-blue-200/10 rounded-t-4xl md:rounded-t-5xl border md:pb-32 py-20 min-h-60 border-b-secondary border-b-4">

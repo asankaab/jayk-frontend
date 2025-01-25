@@ -1,6 +1,4 @@
-export function useLinks() {
-
-  const links = [
+  export const menuItems = [
     {
         title: "Buy", 
         subMenu: [
@@ -48,6 +46,3 @@ export function useLinks() {
         url: '/contact'
     }
     ]
-
-  return links;
-}

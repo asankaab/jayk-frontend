@@ -1,20 +1,11 @@
-import { auth } from './auth';
-
-export default auth((req) => {
-  if (req.auth && req.nextUrl.pathname == "/sign-in") {
-    const newUrl = new URL("/myaccount", req.nextUrl.origin)
-    return Response.redirect(newUrl)
-  }
-  if (req.auth && req.nextUrl.pathname == "/sign-up") {
-    const newUrl = new URL("/myaccount", req.nextUrl.origin)
-    return Response.redirect(newUrl)
-  }
-  if (!req.auth && req.nextUrl.pathname == "/myaccount") {
-    const newUrl = new URL("/sign-in", req.nextUrl.origin)
-    return Response.redirect(newUrl)
-  }
-})
+import { NextResponse } from 'next/server'
+import type { NextRequest } from 'next/server'
  
-export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|.*\\.svg$).*)'],
-};
+export function middleware(request: NextRequest) {
+  if (request.nextUrl.pathname.startsWith('/myaccount') && !request.cookies.get('token')) {
+    return NextResponse.redirect(new URL('/sign-in', request.url))
+  }
+  // if (request.nextUrl.pathname.startsWith('/sign-in') && request.cookies.get('token')) {
+  //   return NextResponse.redirect(new URL('/myaccount', request.url))
+  // }
+}

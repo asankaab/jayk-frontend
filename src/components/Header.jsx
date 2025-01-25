@@ -3,31 +3,13 @@ import Image from "next/image";
 import Link from "next/link";
 import AccountBtn from "./AccountBtn";
 import {  Disclosure, DisclosureButton, DisclosurePanel, Popover, PopoverButton, PopoverGroup, PopoverPanel } from "@headlessui/react";
-import { useLinks } from "@/actions/useLinks";
-// import { useEffect, useState } from "react";
 import { Menu, SquareX } from "lucide-react";
 import logo from "/public/logo.svg"
+import { menuItems } from "@/actions/menuitems";
 
 export default function Header() {
-    // const initialStyle = "sticky border-b border-b-black/5 md:border-b-0 md:backdrop-blur-0 bg-white/5 md:bg-transparent md:py-5";
 
-    // const [offset, setOffset] = useState(initialStyle);
-
-    // useEffect(() => {
-    //     const onScroll = () => {
-    //         if (window.scrollY < 50) {
-    //             setOffset(initialStyle)
-    //         } else {
-    //             setOffset("fixed top-0 border-b border-b-black/5 backdrop-blur-lg bg-white/75");
-    //         }
-    //     };
-    //     // clean up code
-    //     window.removeEventListener('scroll', onScroll);
-    //     window.addEventListener('scroll', onScroll, { passive: true });
-    //     return () => window.removeEventListener('scroll', onScroll);
-    // }, []);
-
-    const links = useLinks();
+    const links = menuItems;
 
     return (
 

@@ -1,12 +1,9 @@
-import { auth } from "@/auth";
 import { SignOutBtn } from "@/components/SignOutBtn";
 import { permanentRedirect, redirect } from "next/navigation"
-import getProfile from "@/actions/getProfile";
+import { getUser } from "@/authentication";
 
 export default async function MyAccount() {
-
-    const session = await auth();
-    const profile = await getProfile();
+    const profile = await getUser();
         
     function capitalize() {
         if (profile?.username) {
@@ -15,7 +12,7 @@ export default async function MyAccount() {
         return "[undefined]"
     }
 
-    if (!session) return redirect('sign-in', 'replace')
+    if (!profile) return redirect('sign-in', 'replace')
 
     return (
         <div className="space-y-2">
