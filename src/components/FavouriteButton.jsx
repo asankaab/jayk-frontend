@@ -14,7 +14,7 @@ export default function FavouriteButton({disabled, isFav, productId}) {
         <Button onClick={
             async() => {
                 setLoading(true);
-                setState(saved)
+                setState(state ? false : true);
                 setLoading(false);
                 const saved = await save(productId);
         }} 
