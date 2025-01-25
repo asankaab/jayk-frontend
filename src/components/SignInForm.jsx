@@ -16,7 +16,7 @@ export default function SignInForm() {
   const [state, formAction, isPending] = useActionState(signIn, undefined, );
 
   const router = useRouter();
-  // Force refresh the page
+  
   useEffect(() => {
     if (state?.user?.id) {
         router.refresh();
@@ -24,7 +24,7 @@ export default function SignInForm() {
         redirect("/myaccount", "replace");
       }, 1000);
     }
-  },[state?.user?.id])
+  },[state?.user?.id, router])
 
   if (state?.user) {
     return <div className="p-4 text-center flex justify-center items-center space-x-2">
