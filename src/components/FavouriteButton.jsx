@@ -14,9 +14,9 @@ export default function FavouriteButton({disabled, isFav, productId}) {
         <Button onClick={
             async() => {
                 setLoading(true);
-                await save(productId);
-                setState(!state)
+                setState(saved)
                 setLoading(false);
+                const saved = await save(productId);
         }} 
         disabled={disabled} type="submit" 
         className="text-neutral-800 hover:text-white bg-neutral-100 border 
