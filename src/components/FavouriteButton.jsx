@@ -13,11 +13,13 @@ export default function FavouriteButton({disabled, isFav, productId}) {
     return (
         <Button onClick={
             async() => {
+                const saved = save(productId);
                 setLoading(true);
-                setState(state ? false : true);
-                setLoading(false);
-                const saved = await save(productId);
-        }} 
+                setTimeout(() => {
+                    setState(!state);
+                    setLoading(false);
+                }, 500);
+            }} 
         disabled={disabled} type="submit" 
         className="text-neutral-800 hover:text-white bg-neutral-100 border 
         hover:bg-primary disabled:text-neutral-400 space-x-2">

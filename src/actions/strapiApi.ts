@@ -77,17 +77,18 @@ export async function createWatchlist(username) {
 
 export async function save(productId) {
   
+  const token = await getAuthToken();  
   const watchList = await getWatchList();
     
   const watchListId = watchList.documentId;
   const isFav = await isFavourite(productId)
   
   if (isFav) {
-    await removeFav(watchListId, productId);
+    await removeFav(watchListId, productId, token);
     revalidateTag('watchlist')
     return false
   } else {
-    await addFav(watchListId, productId);
+    await addFav(watchListId, productId, token);
     revalidateTag('watchlist')
     return true
   }
@@ -108,8 +109,8 @@ export async function isFavourite(productId) {
 }
 //
 
-export async function addFav(watchListId, productId) {
-  const token = await getAuthToken();
+export async function addFav(watchListId, productId, token) {
+
   const res = await fetch(getStrapiURL(`/api/watchlists/${watchListId}`), {
     method: 'PUT',
     headers: {
@@ -129,8 +130,8 @@ export async function addFav(watchListId, productId) {
 }
 //
 
-export async function removeFav(watchListId, productId) {
-  const token = await getAuthToken();
+export async function removeFav(watchListId, productId, token) {
+
   const res = await fetch(getStrapiURL(`/api/watchlists/${watchListId}`), {
     method: 'PUT',
     headers: {
