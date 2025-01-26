@@ -18,7 +18,7 @@ export default function FavouriteButton({disabled, isFav, productId}) {
                 setTimeout(() => {
                     setState(!state);
                     setLoading(false);
-                }, 500);
+                }, 1000);
             }} 
         disabled={disabled} type="submit" 
         className="text-neutral-800 hover:text-white bg-neutral-100 border 

@@ -22,3 +22,11 @@ export const emailSchema = z.object({
 export const resetpwSchema = z.object({
     password: z.string().min(8, {message: "Password must be minimum 8 characters"}).max(32, {message: "Password must be less than 32 characters"}),
 })
+
+const phoneRegex = new RegExp(/^([+]?[\s0-9]+)?(\d{3}|[(]?[0-9]+[)])?([-]?[\s]?[0-9])+$/);
+
+export const orderSchema = z.object({
+    name: z.string().min(1, {message: "required"}).min(4, {message: "name must be minimum 4 characters"}).max(32, { message: "name must be less than 32 characters"}),
+    email: z.string().min(1, {message: "required"}).email().max(64),
+    phone: z.string().regex(phoneRegex, 'Invalid Phone Number!').min(1, {message: "required"}).min(6, {message: "Phone number must be minimum 8 characters"}).max(32, {message: "Phone number must be less than 32 characters"}),
+})

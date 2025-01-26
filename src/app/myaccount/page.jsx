@@ -3,6 +3,7 @@ import { permanentRedirect, redirect } from "next/navigation"
 import { getUser } from "@/authentication";
 
 export default async function MyAccount() {
+    
     const profile = await getUser();
         
     function capitalize() {

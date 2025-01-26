@@ -2,7 +2,10 @@
 
 import { getAuthToken, getUser } from "@/authentication";
 import { getStrapiURL } from "@/lib/utils";
+import { orderSchema } from "@/lib/zod";
+import { connect } from "http2";
 import { revalidateTag } from "next/cache";
+import { parse } from "path";
 
 export async function getEntries(query) {
     try {
@@ -150,3 +153,43 @@ export async function removeFav(watchListId, productId, token) {
   const data = await res.json();
 }
 
+export async function createOrder(prev, formData) {
+
+  const name = await formData.get("name");
+  const email = await formData.get("email");
+  const phone = await formData.get("phone");
+  const message = await formData.get("message");
+  const productId = await formData.get("productId");
+
+  const parsedData = await orderSchema.safeParseAsync({ name, email, phone });
+
+  if (parsedData.success) {
+
+    const res = await fetch(getStrapiURL('/api/orders'), {
+      method: 'POST',
+      headers: {
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_STRAPI_TOKEN}`,
+          'Content-Type': 'application/json',
+      },
+      body: JSON.stringify( { 
+          data: {
+              name: parsedData.data.name,
+              email: parsedData.data.email,
+              phone: parsedData.data.phone,
+              message: message,
+              product: {
+                connect: productId
+              }
+          }
+      })
+    });
+
+    const data = await res.json();
+    
+    return { success: true, data: data.data }
+
+  }
+
+  return { formErrors: parsedData.error.formErrors.fieldErrors }
+  
+}

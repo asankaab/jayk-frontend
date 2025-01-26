@@ -1,12 +1,12 @@
 import { blockStyle } from "@/components/blockStyle"
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { getEntries, isFavourite, save } from "@/actions/strapiApi"
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { BlocksRenderer } from "@strapi/blocks-react-renderer"
-import { Bookmark, Maximize2, PhoneIcon } from "lucide-react";
+import { Bookmark, Contact, Maximize2, PhoneIcon } from "lucide-react";
 import Image from "next/image"
-import { Button } from "@/components/ui/button";
 import FavouriteButton from "@/components/FavouriteButton";
+import ContactButton from "@/components/ContactButton";
 import { getAuthToken } from "@/authentication";
 
 export default async function ProductPage({params}) {
@@ -39,6 +39,9 @@ export default async function ProductPage({params}) {
                                         <Maximize2 color="white"/>
                                     </DialogTrigger>
                                     <DialogContent>
+                                        <DialogHeader>
+                                            <DialogTitle></DialogTitle>
+                                        </DialogHeader>
                                         <Image src={image.formats.large.url} sizes="(max-width: 768px) 100vw, 50vw" width={800} height={800} 
                                             alt={image.alternativeText}/>
                                     </DialogContent>
@@ -54,6 +57,7 @@ export default async function ProductPage({params}) {
                 <div className="grid gap-2 content-start justify-items-start">
                     <h1 className="text-3xl text-primary">{productData[0].title}</h1>
                     <div className="flex items-center gap-4">
+                    <h2 className="text-xl px-2 bg-slate-100">#ID: {productData[0].id}</h2 >
                         <h2 className="text-xl">{productData[0].sqft + " sqft " + productData[0].type}</h2>
                         {productData[0].featured ? 
                         <span className="bg-secondary text-white text-xs px-2 py-1 rounded-sm">Featured</span> : null}
@@ -67,10 +71,7 @@ export default async function ProductPage({params}) {
                     <BlocksRenderer content={productData[0].content} blocks={blockStyle} />
                     <div className="flex gap-2">
                         <FavouriteButton disabled={token ? false : true} isFav={isFav} productId={productId}/>
-                        <Button className="text-neutral-800 hover:text-white bg-neutral-100 border 
-        hover:bg-primary disabled:text-neutral-200 space-x-2 transition">
-                            <PhoneIcon size={15}/> <p>Contact</p>
-                            </Button>
+                        <ContactButton productData={productData}/>
                     </div>
                 </div>
             </div>
