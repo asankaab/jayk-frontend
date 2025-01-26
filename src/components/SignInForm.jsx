@@ -21,15 +21,15 @@ export default function SignInForm() {
     if (state?.user?.id) {
         router.refresh();
         setTimeout(() => {
-        redirect("/myaccount", "replace");
-      }, 1000);
+          redirect("/myaccount", "replace");
+      }, 200);
     }
   },[state?.user?.id, router])
 
   if (state?.user) {
     return <div className="p-4 text-center flex justify-center items-center space-x-2">
-      <Image src="/tube-spinner.svg" alt="loading" width={40} height={15}/>
-      <p>Redirecting...</p></div>
+              <Image src="/tube-spinner.svg" alt="loading" width={40} height={15}/>
+            </div>
   } else {
   
   return (

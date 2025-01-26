@@ -2,6 +2,7 @@ import { Albert_Sans } from "next/font/google";
 import "@/app/globals.css";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
+import { Toaster } from "@/components/ui/sonner";
 
 const albertSans = Albert_Sans({ subsets: ["latin"] });
 
@@ -19,6 +20,7 @@ export default async function RootLayout({ children }) {
           <div className="h-20"></div>
           {children}
         <Footer/>
+        <Toaster/>
       </body>
     </html>
   );
