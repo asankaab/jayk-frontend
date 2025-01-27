@@ -19,12 +19,12 @@ export default function SignInForm() {
   
   useEffect(() => {
     if (state?.user?.id) {
-      
+
         router.refresh();
 
         setTimeout(() => {
           redirect("/myaccount", "replace");
-      }, 500);
+      }, 600);
     }
   },[state?.user?.id, router])
 

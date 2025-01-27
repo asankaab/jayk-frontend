@@ -9,13 +9,14 @@ import { useActionState, useEffect } from "react";
 import { createOrder } from "@/actions/strapiApi";
 import { ZodAlert } from "./ZodAlert";
 import { toast } from "sonner";
+import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
 
 export default function ContactButton({ productData }) {
 
     const [state, formAction, isPending] = useActionState(createOrder, undefined, );
 
     useEffect(() => {
-        toast("Thank you for reaching us. You will be contacted by our agent as soon");
+        if (state?.data?.documentId) toast("Thank you for reaching us. You will be contacted by our agent as soon");
     }, [state?.data?.documentId]);
 
     return (
@@ -46,6 +47,7 @@ export default function ContactButton({ productData }) {
                         {isPending ? <Image src="/bouncing-animation.svg" alt="loading" width={40} height={15}/> : "Submit" }
                     </Button>
                 </form>
+                {state?.error ? <Alert variant="destructive"><AlertTitle>{state?.error?.name}</AlertTitle><AlertDescription>{state?.error?.message}</AlertDescription></Alert>: null}
             </DialogContent>
         </Dialog>
     )
