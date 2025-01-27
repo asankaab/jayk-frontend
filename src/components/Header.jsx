@@ -2,10 +2,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import AccountBtn from "./AccountBtn";
-import {  Disclosure, DisclosureButton, DisclosurePanel, Popover, PopoverButton, PopoverGroup, PopoverPanel } from "@headlessui/react";
-import { Menu, SquareX } from "lucide-react";
+import { Menu, SquareX, X } from "lucide-react";
 import logo from "/public/logo.svg"
 import { menuItems } from "@/actions/menuitems";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { Sheet, SheetClose, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "./ui/sheet";
 
 export default function Header() {
 
@@ -79,44 +80,53 @@ export default function Header() {
             {/* Mobile menu */}
 
             <nav className="md:hidden container w-11/12 mx-auto flex justify-between items-center">
-                <Disclosure as="div" className="flex data-[open]:block items-center justify-between">
+                <Sheet>
                     <div className="relative inset-y-0 left-0 flex items-center md:hidden">
-                        <DisclosureButton className="group relative inline-flex items-center justify-center rounded-md p-2 text-black data-[hover]:bg-primary/20 hover:text-white focus:text-black focus:bg-primary/20 z-50">
+                        <SheetTrigger>
                             <span className="absolute -inset-0.5" />
                             <span className="sr-only">Open main menu</span>
                             <Menu aria-hidden="true" className="block group-data-[open]:hidden" />
                             <SquareX aria-hidden="true" className="hidden group-data-[open]:block" />
-                        </DisclosureButton>
+                        </SheetTrigger>
                     </div>
-                    <DisclosurePanel transition className="divide-y justify-between bg-white w-full absolute left-0 top-0 min-h-dvh box-border pt-14 origin-top transition duration-200 ease-out data-[closed]:-translate-y-6 data-[closed]:opacity-0">
-                    {links.map((item) => {
-                        if (item.subMenu) {
-                            return (
-                            <Popover key={item.title} as="div" className="relative">
-                                <PopoverButton className="font-bold  
-                                hover:text-black focus:outline-0 text-left w-full"><div className="w-11/12 mx-auto py-4">{item.title}</div></PopoverButton>
-                                <PopoverPanel focus transition={true} className="divide-y origin-top transition duration-200 ease-out data-[closed]:-translate-y-6 data-[closed]:opacity-0">
-                                    {item.subMenu.map((subItem) => {
+                    <SheetContent side="top" className="min-h-svh">
+                        <SheetClose><X/></SheetClose>
+                        <SheetHeader>
+                            <SheetTitle></SheetTitle>
+                            <SheetDescription>
+                            </SheetDescription>
+                        </SheetHeader>
+                            <Accordion type="single" collapsible>
+                                {links.map((item) => {
+                                    if (item.subMenu) {
                                         return (
-                                            <PopoverGroup key={subItem.title}>
-                                                <DisclosureButton as={Link} href={subItem.url} className="block px-3 text-gray-500 text-sm hover:text-black">
-                                                    <div className="w-11/12 mx-auto py-4">{subItem.title}</div>
-                                                </DisclosureButton>
-                                            </PopoverGroup>
-                                            )
-                                    })}
-                                </PopoverPanel>
-                            </Popover>
-                            )
-                        } else {
-                            return (
-                                <DisclosureButton as={Link} href={item.url} key={item.title} className="flex font-bold
-                                    hover:text-black focus:outline-0 text-left"><div className="w-11/12 mx-auto py-4">{item.title}</div>
-                                </DisclosureButton>
-                            )
-                    }})}
-                    </DisclosurePanel>
-                </Disclosure>
+                                            <AccordionItem value={item.title} key={item.title}>
+                                            <AccordionTrigger className="font-bold  
+                                            hover:text-black focus:outline-0 text-left "><div className="px-6">{item.title}</div></AccordionTrigger>
+                                            <AccordionContent className="divide-y">
+                                                {item.subMenu.map((subItem) => {
+                                                    return (
+                                                        
+                                                            <Link key={subItem.title} href={subItem.url} className="py-4 text-gray-500 hover:text-black">
+                                                                {subItem.title}
+                                                            </Link>
+                                                        
+                                                        )
+                                                })}
+                                            </AccordionContent>
+                                            </AccordionItem>
+                                        )
+                                    } else {
+                                        return (
+                                            <Link href={item.url} key={item.title} className="flex font-bold
+                                                hover:text-black focus:outline-0 text-left px-5 py-4 border-b ">{item.title}
+                                            </Link>
+                                        )
+                                    }})
+                                }
+                            </Accordion>
+                    </SheetContent>
+                </Sheet>
                 <Link href='/' className="block">
                         <Image src="/logo.svg" alt="logo" width={100} height={5} className="w-auto"/>
                 </Link>
