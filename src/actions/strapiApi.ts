@@ -3,9 +3,7 @@
 import { getAuthToken, getUser } from "@/authentication";
 import { getStrapiURL } from "@/lib/utils";
 import { orderSchema } from "@/lib/zod";
-import { connect } from "http2";
 import { revalidateTag } from "next/cache";
-import { parse } from "path";
 
 export async function getEntries(query) {
     try {
@@ -25,15 +23,29 @@ export async function getEntries(query) {
       }
   
       const jsonResponse = await response.json();
-      const entries = jsonResponse.data; // Accessing the 'data' array
+      const entries = jsonResponse.data;
       
       return entries;
   
     } catch (error) {
       console.error("Error:", error);
     }
-  }
-// 
+}
+
+export async function getMainMenu() {
+  const response = await fetch(getStrapiURL('/api/mainmenu?populate[menuitem][populate][0]=submenuitem'), {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${process.env.NEXT_PUBLIC_STRAPI_TOKEN}`, 
+    },
+    next: { revalidate: 20 }
+  });
+
+  const { data, error } = await response.json();
+  return data;
+}
+
 
 export async function getWatchList() {
   const user = await getUser();
