@@ -1,4 +1,3 @@
-
 import Image from "next/image";
 import Link from "next/link";
 import AccountBtn from "./AccountBtn";
@@ -7,10 +6,13 @@ import logo from "/public/logo.svg"
 import { menuItems } from "@/actions/menuitems";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Sheet, SheetClose, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "./ui/sheet";
+import { getMainMenu } from "@/actions/strapiApi";
 
-export default function Header() {
+export default async function Header() {
 
     const links = menuItems;
+
+    // const menu = await getMainMenu();
 
     return (
 
@@ -102,15 +104,13 @@ export default function Header() {
                                         return (
                                             <AccordionItem value={item.title} key={item.title}>
                                             <AccordionTrigger className="font-bold  
-                                            hover:text-black focus:outline-0 text-left "><div className="px-6">{item.title}</div></AccordionTrigger>
-                                            <AccordionContent className="divide-y">
+                                            hover:text-black focus:outline-0 text-left "><div className="px-5">{item.title}</div></AccordionTrigger>
+                                            <AccordionContent asChild className="divide-y flex flex-col px-4">
                                                 {item.subMenu.map((subItem) => {
                                                     return (
-                                                        
-                                                            <Link key={subItem.title} href={subItem.url} className="py-4 text-gray-500 hover:text-black">
-                                                                {subItem.title}
-                                                            </Link>
-                                                        
+                                                        <Link key={subItem.title} href={subItem.url} className="py-4 text-gray-500 hover:text-black">
+                                                            {subItem.title}
+                                                        </Link>
                                                         )
                                                 })}
                                             </AccordionContent>
