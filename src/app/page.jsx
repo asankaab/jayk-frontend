@@ -9,6 +9,7 @@ import herobg from "/public/herobg.jpg"
 import sectionbg from "/public/sectionbg.jpg"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
+import { SearchBox } from "@/components/SearchBox"
 
 export default async function Home() {
 
@@ -33,10 +34,7 @@ export default async function Home() {
                   <TabsTrigger value="estimate">Value Estimate</TabsTrigger>
                 </TabsList>
                 <TabsContent value="find" className="rounded-md mt-0 backdrop-blur-sm bg-white/45 text-left">
-                  <form className="relative flex flex-col justify-center items-center">
-                    <input type="text" name="search" id="" placeholder="Search a house" className="p-4 w-full rounded-b rounded-r  focus:opacity-100 focus:outline-none focus:shadow" />
-                    <button type="submit" className="absolute right-0 p-4 hover:scale-110 transition"><SearchIcon/></button>
-                  </form>
+                  <SearchBox/>
                 </TabsContent>
                 <TabsContent value="estimate" className="rounded-md mt-0 backdrop-blur-sm bg-white/45 text-left">
                   <form className="relative flex flex-col justify-center items-center">
