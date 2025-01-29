@@ -3,13 +3,12 @@ import Image from "next/image";
 import Link from "next/link";
 import LinkCard from "@/components/LinkCard";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { SearchIcon } from "lucide-react";
 import { getEntries } from "@/actions/strapiApi";
 import herobg from "/public/herobg.jpg"
 import sectionbg from "/public/sectionbg.jpg"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Input } from "@/components/ui/input";
 import { SearchBox } from "@/components/SearchBox"
+import { Estimator } from "@/components/Estimator"
 
 export default async function Home() {
 
@@ -37,10 +36,7 @@ export default async function Home() {
                   <SearchBox/>
                 </TabsContent>
                 <TabsContent value="estimate" className="rounded-md mt-0 backdrop-blur-sm bg-white/45 text-left">
-                  <form className="relative flex flex-col justify-center items-center">
-                    <input type="text" name="search" id="" placeholder="Value Estimate" className="p-4 w-full rounded-b rounded-r  focus:opacity-100 focus:outline-none focus:shadow" />
-                    <button type="submit" className="absolute right-0 p-4 hover:scale-110 transition"><SearchIcon/></button>
-                  </form>
+                  <Estimator/>
                 </TabsContent>
               </Tabs>
             
