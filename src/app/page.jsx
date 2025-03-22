@@ -12,7 +12,7 @@ import { Estimator } from "@/components/Estimator"
 
 export default async function Home() {
 
-  // const homePage = await getEntries("homepage");
+  const homePage = await getEntries("homepage");
   const content = await getEntries("products?populate[images][populate]&pagination[pageSize]=4");
   const guides = await getEntries("guides");
   const contact = await getEntries("contact?populate=*");
