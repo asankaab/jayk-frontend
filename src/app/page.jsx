@@ -12,7 +12,7 @@ import { Estimator } from "@/components/Estimator"
 
 export default async function Home() {
 
-  const homePage = await getEntries("homepage");
+  // const homePage = await getEntries("homepage");
   const content = await getEntries("products?populate[images][populate]&pagination[pageSize]=4");
   const guides = await getEntries("guides");
   const contact = await getEntries("contact?populate=*");
@@ -24,8 +24,8 @@ export default async function Home() {
       <main className="text-center relative max-h-[90dvh]">
         <div className="container w-11/12 mx-auto flex flex-col items-center justify-center min-h-dvh">
           <div className="relative -top-10 w-full md:w-9/12 text-center grid justify-items-center">
-            <h1 className="text-lg md:text-2xl text-white drop-shadow-md">{homePage?.subHeading}</h1>
-            <h1 className="text-4xl md:text-6xl text-white drop-shadow-md py-2">{homePage?.mainHeading}</h1>
+            <h1 className="text-lg md:text-2xl text-white drop-shadow-md">We are the top tier real estate platform.</h1>
+            <h1 className="text-4xl md:text-6xl text-white drop-shadow-md py-2">Unlock the door to your Future.</h1>
             
               <Tabs defaultValue="find" className="w-full md:w-8/12 rounded-md mt-2 backdrop-blur-sm bg-white/45 p-4 text-left" >
                 <TabsList>
