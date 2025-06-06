@@ -8,7 +8,8 @@ import Image from "next/image";
 import bouncingAnimation from "/public/bouncing-animation.svg"
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { ErrorDisplay } from "@/components/SignupForm";
+import { ZodAlert } from "@/components/ZodAlert";
+import { resetPasswordConfirm } from "@/actions/auth";
  
 export default function ResetPassword() {
 
@@ -16,7 +17,7 @@ export default function ResetPassword() {
     const email = params.get('email')
     const code = params.get('code');
 
-  const [state, formAction, isPending] = useActionState(null,undefined,);
+  const [state, formAction, isPending] = useActionState(resetPasswordConfirm,undefined,);
 
   return (
     <div className="container w-11/12 mx-auto text-left py-5">
@@ -24,32 +25,32 @@ export default function ResetPassword() {
             <div className="border p-4 rounded-md text-center space-y-2">
                 <div>
                     <h1 className=" text-2xl font-bold">Forgot Password</h1>
-                    <p className="text-neutral-600 text-sm">Enter your new password</p>
+                    <p className="text-neutral-600 text-sm">Set your new password</p>
                 </div>        
-                <form action={formAction} className="space-y-3"
+                {!state?.user && <form action={formAction} className="space-y-3"
                 >            
                     <Input name="email" defaultValue={email} type="email" placeholder="@email" disabled/>
                     <input type="hidden" name="code" defaultValue={code}/>
                     <div>
                         <Input name="password" type="password" placeholder="New password" />
-                        <ErrorDisplay field={state?.formErrors?.password} isPending={isPending}/>
+                        <ZodAlert field={state?.formErrors?.password} isPending={isPending}/>
                     </div>
                     <div>
                         <Input name="passwordConfirmation" type="password" placeholder="Retype new password" />
-                        <ErrorDisplay field={state?.passwordConfirmation} isPending={isPending}/>
+                        <ZodAlert field={state?.passwordConfirmation} isPending={isPending}/>
                     </div>
                     <Button disabled={isPending} className="bg-primary hover:bg-primary-dark w-full disabled:opacity-75" type="submit">{isPending ? <Image src={bouncingAnimation} alt="loading" width={40} height={15}/> : "Reset Password" }</Button>
-                </form>
+                </form>}
                 <div>
-                {state?.serverErrors && !isPending ? 
+                {state?.error && !isPending ? 
                 <Alert className="text-left">
-                    <AlertTitle className="flex items-center gap-2"><AlertCircle color="red"/>{state?.serverErrors?.name}</AlertTitle>
-                    <AlertDescription>{state?.serverErrors?.message}</AlertDescription>
+                    <AlertTitle className="flex items-center gap-2"><AlertCircle color="red"/>{state?.error?.name}</AlertTitle>
+                    <AlertDescription>{state?.error?.message}</AlertDescription>
                 </Alert> : null }
-                {state?.data?.user?.email && !isPending ? 
+                {state?.user?.email && !isPending ? 
                 <Alert className="text-left">
                     <AlertTitle className="flex items-center gap-2"><CircleCheck color="green"/>Sucess</AlertTitle>
-                    <AlertDescription>A new password has been set for account, {state?.data?.user?.email}</AlertDescription>
+                    <AlertDescription>A new password has been set for account, {state?.user?.email}</AlertDescription>
                 </Alert> : null }
                 <div className="space-x-2">
                     <Link href="/auth/forgotpassword" className="text-xs text-neutral-500 hover:text-neutral-700 hover:underline">Resend reset password email</Link>

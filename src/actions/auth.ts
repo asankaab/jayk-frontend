@@ -1,5 +1,5 @@
 import { getStrapiURL } from "@/lib/utils";
-import { emailSchema, loginSchema, registerSchema } from "@/lib/zod";
+import { emailSchema, loginSchema, registerSchema, resetpwSchema } from "@/lib/zod";
 import { createWatchlist } from "./strapiApi";
 import { redirect } from "next/navigation";
 
@@ -114,4 +114,53 @@ export async function confirmEmail(code: string, username: string) {
     }
 
     return null
+}
+
+export async function resetPassword(prevState, formData) {
+
+    const email = await formData.get('email')
+
+    const parsedCredentials = await emailSchema.safeParseAsync({ email })
+
+    const res = await fetch(getStrapiURL('/api/auth/forgot-password'), {
+        method: 'POST',
+        headers: {
+        'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(parsedCredentials.data),
+    });
+
+    const data = await res.json();
+    
+    return data;
+}
+
+export async function resetPasswordConfirm(prevState, formData) {
+
+    const email = await formData.get('email')
+    const code = await formData.get('code')
+    const password = await formData.get('password')
+    const passwordConfirmation = await formData.get('passwordConfirmation')
+
+    const parsedCredentials = await resetpwSchema.safeParseAsync({ password })
+
+    if (password !== passwordConfirmation) {
+        return { error: { message: 'Passwords do not match!', name: 'Validation Error'} }
+    }
+
+    if (parsedCredentials.error) {
+        return { error: { message: parsedCredentials.error.formErrors.fieldErrors.password[0], name: 'Validation Error'} }
+    }
+
+    const res = await fetch(getStrapiURL('/api/auth/reset-password'), {
+        method: 'POST',
+        headers: {
+        'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ code, password, passwordConfirmation }),
+    });
+
+    const data = await res.json();
+    
+    return data;
 }

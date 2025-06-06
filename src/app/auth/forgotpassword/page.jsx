@@ -7,10 +7,12 @@ import { AlertCircle, CircleCheck } from "lucide-react";
 import Image from "next/image";
 import bouncingAnimation from "/public/bouncing-animation.svg"
 import Link from "next/link";
+import { resetPassword } from "@/actions/auth";
  
 export default function ForgotPassword() {
 
-  const [state, formAction, isPending] = useActionState(null,undefined,);
+  const [state, formAction, isPending] = useActionState( resetPassword, undefined );
+  console.log(state)
 
   return (
     <div className="container w-11/12 mx-auto text-left py-5">
@@ -26,17 +28,12 @@ export default function ForgotPassword() {
                     <Button disabled={isPending} className="bg-primary hover:bg-primary-dark w-full disabled:opacity-75" type="submit">{isPending ? <Image src={bouncingAnimation} alt="loading" width={40} height={15}/> : "Send" }</Button>
                 </form>
                 <div>
-                {state?.serverErrors && !isPending ? 
-                <Alert className="text-left">
-                    <AlertTitle className="flex items-center gap-2"><AlertCircle color="red"/>Server Error</AlertTitle>
-                    <AlertDescription>{state?.serverErrors}</AlertDescription>
-                </Alert> : null }
-                {state?.formErrors?.email && !isPending ? 
+                {state?.error && !isPending ? 
                 <Alert className="text-left">
                     <AlertTitle className="flex items-center gap-2"><AlertCircle color="red"/>Validation Error</AlertTitle>
-                    <AlertDescription>{state?.formErrors?.email.map((error) => `* ${error}`)}</AlertDescription>
+                    <AlertDescription>{state?.error?.message}</AlertDescription>
                 </Alert> : null }
-                {state?.data && !isPending ? 
+                {state?.ok && !isPending ? 
                 <Alert className="text-left">
                     <AlertTitle className="flex items-center gap-2"><CircleCheck color="green"/>Email sent.</AlertTitle>
                     <AlertDescription>A password reset email will be sent if your email address matches our database.</AlertDescription>
