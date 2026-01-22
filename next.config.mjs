@@ -4,13 +4,7 @@ const nextConfig = {
         remotePatterns: [
           {
             protocol: 'https',
-            hostname: 'storage.googleapis.com',
-            port: '',
-            pathname: '/jk-strapi-cms/**',
-          },
-          {
-            protocol: 'https',
-            hostname: 'jjqiucyavgbuvasxsznv.supabase.co',
+            hostname: 'appetizing-pleasure-a679a7b137.media.strapiapp.com',
             port: '',
             pathname: '/**',
           },

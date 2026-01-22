@@ -13,7 +13,7 @@ export default function Card({ href, image, title, price, beds, bathrooms}) {
     return (
         <div className="bg-white border rounded-md shadow-2xl shadow-black/5 text-left">
             <div className="rounded-t-md relative min-h-48">
-                <Image src={image.formats.thumbnail.url || 'no-image.svg'} alt={image.alternativeText} fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" placeholder="blur" blurDataURL={"data:image/gif;base64,"+image.blurhash} className="object-cover rounded-t-md" />
+                <Image src={'no-image.svg' || image?.formats.thumbnail.url} alt={image.alternativeText} fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" placeholder="blur" blurDataURL={"data:image/gif;base64,"+image.blurhash} className="object-cover rounded-t-md" />
             </div>
             <div className="p-4 grid gap-2">
                 <h2 className="font-bold text-2xl">{priceFormatted}</h2>

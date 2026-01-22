@@ -3,20 +3,20 @@ import Image from "next/image";
 import Link from "next/link";
 import LinkCard from "@/components/LinkCard";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { getEntries } from "@/actions/strapiApi";
 import herobg from "/public/herobg.jpg"
 import sectionbg from "/public/sectionbg.jpg"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { SearchBox } from "@/components/SearchBox"
-import { Estimator } from "@/components/Estimator"
+import { SearchBox } from "@/components/SearchBox";
+import { Estimator } from "@/components/Estimator";
+import { getBrand, getContact, getGuides, getProducts } from "@/lib/graphql"
 
 export default async function Home() {
 
-  const homePage = await getEntries("homepage");
-  const content = await getEntries("products?populate[images][populate]&pagination[pageSize]=4");
-  const guides = await getEntries("guides");
-  const contact = await getEntries("contact?populate=*");
-  const brands = await getEntries("brand?populate=*");
+  const homePage = null;
+  const products = await getProducts();
+  const guides = await getGuides();
+  const contact = await getContact();
+  const brands = await getBrand();
 
   return (
     <>
@@ -47,9 +47,9 @@ export default async function Home() {
         <div className="container w-11/12 mx-auto text-center grid justify-items-center gap-10">
           <h1 className="text-2xl">Featured Listings</h1>
           <div className="mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-              {content ? content?.slice(0,4).map((item) => {
+              {products ? products.map((item) => {
                 return (
-                  <Card key={item.documentId} href={"realestate/" + item.slug} image={item.images[0]} beds={item.beds} bathrooms={item.bathrooms} price={item.price} title={item.title} />
+                  <Card key={item.documentId} href={"realestate/" + item.slug} image={'/no-image.svg' || item.images[0]} beds={item.beds} bathrooms={item.bathrooms} price={item.price} title={item.title} />
                 )
               }) : <p>No content</p>}
             </div>
